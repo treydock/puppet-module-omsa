@@ -33,7 +33,7 @@ describe 'omsa' do
           it do
             should contain_yumrepo('dell-omsa-indep').with({
               :descr          => 'Dell OMSA repository - Hardware independent',
-              :baseurl        => nil,
+              :baseurl        => 'absent',
               :mirrorlist     => 'http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver',
               :enabled        => '1',
               :gpgcheck       => '1',
@@ -61,7 +61,7 @@ describe 'omsa' do
             end
 
             it { should contain_yumrepo('dell-omsa-indep').with_baseurl(baseurl) }
-            it { should contain_yumrepo('dell-omsa-indep').without_mirrorlist }
+            it { should contain_yumrepo('dell-omsa-indep').with_mirrorlist('absent') }
           end
         end
       end

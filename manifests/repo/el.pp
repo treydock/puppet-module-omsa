@@ -5,11 +5,11 @@ class omsa::repo::el {
   }
 
   if $omsa::use_mirror {
-    $indep_baseurl    = undef
+    $indep_baseurl    = 'absent'
     $indep_mirrorlist = $omsa::indep_mirrorlist
   } else {
     $indep_baseurl    = $omsa::indep_baseurl
-    $indep_mirrorlist = undef
+    $indep_mirrorlist = 'absent'
   }
 
   yumrepo { 'dell-omsa-indep':
