@@ -57,7 +57,6 @@ describe 'omsa' do
           it do
             should contain_package('yum-dellsysid').with({
               :ensure   => 'present',
-              :before   => 'Yumrepo[dell-omsa-specific]',
               :require  => 'Yumrepo[dell-omsa-indep]',
             })
           end

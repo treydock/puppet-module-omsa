@@ -44,7 +44,6 @@ class omsa::repo::el {
 
   package { 'yum-dellsysid':
     ensure  => 'present',
-    before  => Yumrepo['dell-omsa-specific'],
     require => Yumrepo['dell-omsa-indep'],
   }
 }
