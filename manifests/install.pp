@@ -7,25 +7,26 @@ class omsa::install {
   case $omsa::install_type {
     # All
     'all': {
-      $srvadmin_package_name = 'srvadmin-all'
+      package { 'srvadmin-all':
+        ensure => 'present',
+      }
     }
     # Just enough for omreport
     'minimal': {
-      $srvadmin_package_name = 'srvadmin-base'
+      package { 'srvadmin-base':
+        ensure => 'present',
+      }
+      package { 'srvadmin-storageservices':
+        ensure => 'present',
+      }
     }
     # Nothing
     default: { }
   }
 
-  package { 'srvadmin':
-    ensure => 'present',
-    name   => $srvadmin_package_name,
-  }
-
   if $omsa::install_firmware_tools {
     package { 'dell_ft_install':
       ensure  => 'present',
-      require => Package['srvadmin'],
     }
   }
 
