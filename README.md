@@ -21,7 +21,7 @@ TODO
 #### Private classes
 
 * `omsa::repo`: Includes the OS specific repo class
-* `omsa::repo::el`: Manages the OMSA yum repository and plugin package
+* `omsa::repo::el`: Manages the OMSA yum repositories and plugin package
 * `omsa::install`: Installs necessary packages
 * `omsa::service`: Manages the srvadmin-services.sh service
 * `omsa::params`: Sets default values based on the `osfamily` and `operatingsystemrelease` facts.
@@ -60,4 +60,3 @@ If you have Vagrant >= 1.2.0 installed you can run system tests
 ## TODO
 
 * Facts specific to Dell, similar to those added by yum plugin
-* Manage the dell-omsa-specific yumrepo

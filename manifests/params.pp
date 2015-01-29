@@ -53,8 +53,10 @@ class omsa::params (
     }
   }
 
-  $indep_baseurl    = "${repo_base}/platform_independent/${os_bit}/"
-  $indep_mirrorlist = "${repo_base}/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&native=1&dellsysidpluginver=\$dellsysidpluginver"
-  $dell_gpgkey      = "${gpgkey_base}/RPM-GPG-KEY-dell"
-  $libsmbios_gpgkey = "${gpgkey_base}/RPM-GPG-KEY-libsmbios"
+  $indep_baseurl       = "${repo_base}/platform_independent/${os_bit}/"
+  $indep_mirrorlist    = "${repo_base}/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&native=1&dellsysidpluginver=\$dellsysidpluginver"
+  $hardware_baseurl    = "${repo_base}/system.ven_\$sys_ven_id.dev_\$sys_dev_id/${os_bit}"
+  $hardware_mirrorlist = "${repo_base}/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&native=1&sys_ven_id=\$sys_ven_id&sys_dev_id=\$sys_dev_id&dellsysidpluginver=\$dellsysidpluginver"
+  $dell_gpgkey         = "${gpgkey_base}/RPM-GPG-KEY-dell"
+  $libsmbios_gpgkey    = "${gpgkey_base}/RPM-GPG-KEY-libsmbios"
 }

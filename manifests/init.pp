@@ -1,14 +1,18 @@
 # Class: omsa: See README.md for documentation
 class omsa (
-  $use_mirror       = true,
-  $indep_baseurl    = $omsa::params::indep_baseurl,
-  $indep_mirrorlist = $omsa::params::indep_mirrorlist,
-  $dell_gpgkey      = $omsa::params::dell_gpgkey,
-  $libsmbios_gpgkey = $omsa::params::libsmbios_gpgkey,
-  $install_type     = 'all',
+  $use_mirror             = true,
+  $indep_baseurl          = $omsa::params::indep_baseurl,
+  $indep_mirrorlist       = $omsa::params::indep_mirrorlist,
+  $hardware_baseurl       = $omsa::params::hardware_baseurl,
+  $hardware_mirrorlist    = $omsa::params::hardware_mirrorlist,
+  $enable_hardware_repo   = true,
+  $dell_gpgkey            = $omsa::params::dell_gpgkey,
+  $libsmbios_gpgkey       = $omsa::params::libsmbios_gpgkey,
+  $install_type           = 'all',
+  $install_firmware_tools = true,
 ) inherits omsa::params {
 
-  validate_bool($use_mirror)
+  validate_bool($use_mirror, $enable_hardware_repo, $install_firmware_tools)
   validate_re($install_type, ['^all$', '^minimal$'])
 
   case $::manufacturer {

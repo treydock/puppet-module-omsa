@@ -43,8 +43,21 @@ describe 'omsa' do
           end
 
           it do
+            should contain_yumrepo('dell-omsa-specific').with({
+              :descr          => 'Dell OMSA repository - Hardware specific',
+              :baseurl        => 'absent',
+              :mirrorlist     => 'http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver',
+              :enabled        => '1',
+              :gpgcheck       => '1',
+              :gpgkey         => 'http://linux.dell.com/repo/hardware/latest/RPM-GPG-KEY-dell http://linux.dell.com/repo/hardware/latest/RPM-GPG-KEY-libsmbios',
+              :failovermethod => 'priority',
+            })
+          end
+
+          it do
             should contain_package('yum-dellsysid').with({
               :ensure   => 'present',
+              :before   => 'Yumrepo[dell-omsa-specific]',
               :require  => 'Yumrepo[dell-omsa-indep]',
             })
           end
@@ -53,30 +66,49 @@ describe 'omsa' do
             let(:params) {{ :use_mirror => false }}
             case os
             when /-5-/
-              baseurl = 'http://linux.dell.com/repo/hardware/latest/platform_independent/rh50_64/'
+              os_bit = 'rh50_64'
             when /-6-/
-              baseurl = 'http://linux.dell.com/repo/hardware/latest/platform_independent/rh60_64/'
+              os_bit = 'rh60_64'
             when /-7-/
-              baseurl = 'http://linux.dell.com/repo/hardware/latest/platform_independent/rh70_64/'
+              os_bit = 'rh70_64'
             end
 
-            it { should contain_yumrepo('dell-omsa-indep').with_baseurl(baseurl) }
+            it { should contain_yumrepo('dell-omsa-indep').with_baseurl("http://linux.dell.com/repo/hardware/latest/platform_independent/#{os_bit}/") }
             it { should contain_yumrepo('dell-omsa-indep').with_mirrorlist('absent') }
+            it { should contain_yumrepo('dell-omsa-specific').with_baseurl("http://linux.dell.com/repo/hardware/latest/system.ven_$sys_ven_id.dev_$sys_dev_id/#{os_bit}") }
+            it { should contain_yumrepo('dell-omsa-specific').with_mirrorlist('absent') }
+          end
+
+          context 'when enable_hardware_repo => false' do
+            let(:params) {{ :enable_hardware_repo => false }}
+            it { should contain_yumrepo('dell-omsa-specific').with_enabled('0') }
           end
         end
       end
 
       context 'omsa::install' do
-        it { should contain_package('srvadmin-all').with_ensure('present') }
-        it { should_not contain_package('srvadmin-omcommon') }
-        it { should_not contain_package('srvadmin-omacore') }
+        it do
+          should contain_package('srvadmin').with({
+            :ensure => 'present',
+            :name   => 'srvadmin-all',
+          })
+        end
+
+        it do
+          should contain_package('dell_ft_install').with({
+            :ensure   => 'present',
+            :require  => 'Package[srvadmin]',
+          })
+        end
 
         context 'when install_type => minimal' do
           let(:params) {{ :install_type => 'minimal' }}
+          it { should contain_package('srvadmin').with_name('srvadmin-base') }
+        end
 
-          it { should_not contain_package('srvadmin-all') }
-          it { should contain_package('srvadmin-omcommon').with_ensure('present').that_comes_before('Package[srvadmin-omacore]') }
-          it { should contain_package('srvadmin-omacore').with_ensure('present') }
+        context 'when install_firmware_tools => false' do
+          let(:params) {{ :install_firmware_tools => false }}
+          it { should_not contain_package('dell_ft_install') }
         end
       end
 
