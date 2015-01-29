@@ -89,12 +89,14 @@ describe 'omsa' do
         it { should contain_package('srvadmin-all').with_ensure('present') }
         it { should_not contain_package('srvadmin-base') }
         it { should_not contain_package('srvadmin-storageservices') }
+        it { should_not contain_package('srvadmin-omcommon') }
         it { should contain_package('dell_ft_install').with_ensure('present') }
 
         context 'when install_type => minimal' do
           let(:params) {{ :install_type => 'minimal' }}
-          it { should contain_package('srvadmin-base') }
-          it { should contain_package('srvadmin-storageservices') }
+          it { should contain_package('srvadmin-base').with_ensure('present') }
+          it { should contain_package('srvadmin-storageservices').with_ensure('present') }
+          it { should contain_package('srvadmin-omcommon').with_ensure('present') }
           it { should_not contain_package('srvadmin-all') }
         end
 

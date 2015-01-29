@@ -19,6 +19,9 @@ class omsa::install {
       package { 'srvadmin-storageservices':
         ensure => 'present',
       }
+      package { 'srvadmin-omcommon':
+        ensure => 'present',
+      }
     }
     # Nothing
     default: { }
