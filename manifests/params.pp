@@ -26,30 +26,32 @@ class omsa::params (
   $gpgkey_base = 'http://linux.dell.com/repo/hardware/latest',
 ) {
 
-  if $::architecture != 'x86_64' {
-    fail("Unsupported architecture: ${::architecture}, module ${module_name} only supports x86_64.")
-  }
-
-  case $::osfamily {
-    'RedHat': {
-      case $::operatingsystemrelease {
-        /^5/: {
-          $os_bit = 'rh50_64'
-        }
-        /^6/: {
-          $os_bit = 'rh60_64'
-        }
-        /^7/: {
-          $os_bit = 'rh70_64'
-        }
-        default: {
-          fail("Unsupported operatingsystemrelease: ${::operatingsystemrelease}, module ${module_name} only supports 5.x, 6.x, and 7.x")
-        }
-      }
+  if $::manufacturer =~ /Dell/ {
+    if $::architecture != 'x86_64' {
+      fail("Unsupported architecture: ${::architecture}, module ${module_name} only supports x86_64.")
     }
 
-    default: {
-      fail("Unsupported osfamily: ${::osfamily}, module ${module_name} only supports osfamily RedHat.")
+    case $::osfamily {
+      'RedHat': {
+        case $::operatingsystemrelease {
+          /^5/: {
+            $os_bit = 'rh50_64'
+          }
+          /^6/: {
+            $os_bit = 'rh60_64'
+          }
+          /^7/: {
+            $os_bit = 'rh70_64'
+          }
+          default: {
+            fail("Unsupported operatingsystemrelease: ${::operatingsystemrelease}, module ${module_name} only supports 5.x, 6.x, and 7.x")
+          }
+        }
+      }
+
+      default: {
+        fail("Unsupported osfamily: ${::osfamily}, module ${module_name} only supports osfamily RedHat.")
+      }
     }
   }
 
